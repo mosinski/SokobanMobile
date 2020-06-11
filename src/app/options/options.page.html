@@ -1,9 +1,31 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>options</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
+  <ion-card id="options">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">Options</ion-card-title>
+    </ion-card-header>
 
+    <form (ngSubmit)="saveForm()">
+      <ion-list mode="ios">
+        <ion-list-header>
+          Volume
+        </ion-list-header>
+        <ion-item>
+          <ion-range min="0" max="100" color="secondary" [(ngModel)]="volume.music" name="music" (ionChange)="saveForm()">
+            <ion-label slot="start">
+              <ion-icon name="musical-notes-outline" size="large"></ion-icon>
+            </ion-label>
+            <ion-label slot="end">{{volume.music}}</ion-label>
+          </ion-range>
+        </ion-item>
+        <ion-item>
+          <ion-range min="0" max="100" color="secondary" [(ngModel)]="volume.sounds" name="sounds" (ionChange)="saveForm()">
+            <ion-label slot="start">
+              <ion-icon name="volume-high-outline" size="large"></ion-icon>
+            </ion-label>
+            <ion-label slot="end">{{volume.sounds}}</ion-label>
+          </ion-range>
+        </ion-item>
+      </ion-list>
+    </form>
+  </ion-card>
 </ion-content>
