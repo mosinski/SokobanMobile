@@ -7,15 +7,30 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" center>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">{{ folder }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong class="capitalize">{{ folder }}</strong>
-    <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-card id="menu">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">SokoBan</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-text-center">
+          <ion-col>Play</ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col>Options</ion-col>
+        </ion-row>
+        <ion-row class="ion-text-center">
+          <ion-col>Credits</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

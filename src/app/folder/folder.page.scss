@@ -26,3 +26,17 @@ ion-menu-button {
 #container a {
   text-decoration: none;
 }
+
+#menu {
+  font-family: Arcade;
+  margin: auto;
+  max-width: 500px;
+
+  ion-card-title {
+    font-size: 10vh;
+  }
+
+  ion-card-content {
+    font-size: 8vh;
+  }
+}
