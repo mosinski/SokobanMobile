@@ -1,7 +1,7 @@
 # Sokoban <img src="https://raw.githubusercontent.com/mosinski/SokobanMobile/master/resources/icon.png" width="40">
 
 ## :tada: Demo
-- [Android](https://github.com/mosinski/SokobanMobile/releases/download/0.0.1/app-debug.apk)
+- [Android](https://github.com/mosinski/SokobanMobile/releases/download/0.0.5/app-debug.apk)
 
 ## :rocket: Dependencies
 
