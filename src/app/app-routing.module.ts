@@ -8,8 +8,12 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
+    path: 'levels',
+    loadChildren: () => import('./levels/levels.module').then( m => m.LevelsPageModule)
+  },
+  {
+    path: 'levels/:id',
+    loadChildren: () => import('./levels/levels.module').then( m => m.LevelsPageModule)
   },
   {
     path: 'options',
