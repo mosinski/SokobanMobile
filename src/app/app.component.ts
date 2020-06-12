@@ -15,17 +15,17 @@ export class AppComponent implements OnInit {
     {
       title: 'Menu',
       url: '/menu',
-      icon: 'settings-outline'
+      icon: 'menu'
     },
     {
       title: 'Play',
       url: '/levels',
-      icon: 'game-controller-outline'
+      icon: 'game-controller'
     },
     {
       title: 'Options',
       url: '/options',
-      icon: 'settings-outline'
+      icon: 'settings'
     }
   ];
 
