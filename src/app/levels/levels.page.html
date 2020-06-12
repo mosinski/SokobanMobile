@@ -1,8 +1,14 @@
 <ion-content [fullscreen]="true" center>
+  <div id="space-invaders"></div>
   <div id="list" *ngIf="!level">
     <ion-button *ngFor="let level of levels" [routerLink]="['/levels/' + level.id]" routesrDirect="root" class="level">
       <h1>{{ level.id }}</h1>
     </ion-button>
+  </div>
+  <div class="buttons phone-only">
+    <ion-button color="danger" (touchstart)="fireStart($event)" (touchend)="fireEnd($event)">Fire</ion-button>
+    <ion-button (touchstart)="leftStart($event)" (touchend)="leftEnd($event)">Left</ion-button>
+    <ion-button (touchstart)="rightStart($event)" (touchend)="rightEnd($event)">Right</ion-button>
   </div>
   <div id="level" *ngIf="level">
   </div>
