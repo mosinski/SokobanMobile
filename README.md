@@ -1,7 +1,13 @@
 # Sokoban <img src="https://raw.githubusercontent.com/mosinski/SokobanMobile/master/resources/icon.png" width="40">
 
 ## :tada: Demo
-- [Android](https://github.com/mosinski/SokobanMobile/releases/download/0.0.5/app-debug.apk)
+- [Android](https://github.com/mosinski/SokobanMobile/releases/download/0.4.5/app-debug.apk)
+
+## :wrench: Build
+
+```
+ionic cordova build android --prod --aot --minifyjs --minifycss --optimizejs
+```
 
 ## :rocket: Dependencies
 

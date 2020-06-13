@@ -1,6 +1,6 @@
 export class Wall {
-  x:integer = 0;
-  y:integer = 0;
+  x:number = 0;
+  y:number = 0;
   color:string = "brown";
   type:string = "";
 
