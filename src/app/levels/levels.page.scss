@@ -2,3 +2,32 @@
   min-width: 100px;
   min-height: 100px;
 }
+
+.buttons {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  ion-button:first-child {
+    flex: 2;
+  }
+}
+
+@media screen and (min-width:768px){
+  .phone-only{
+    display: none;
+  }
+}
+
+.menu-button{
+  position: absolute;
+  background: transparent;
+  left: calc(50% - 50px);
+  text-align: center;
+  height: 40px;
+  line-height: 43px;
+  color: white;
+  font-weight: bold;
+  z-index: 100;
+  max-width: 100px;
+}
