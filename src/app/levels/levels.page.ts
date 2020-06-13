@@ -50,4 +50,10 @@ export class LevelsPage implements OnInit {
   create() {
     game.add.image(0, 0, 'sprites').setOrigin(0);
   }
+
+  update() {
+  }
+
+  render() {
+  }
 }
