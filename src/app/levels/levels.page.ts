@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 import { Levels } from 'levels';
 import { Wall } from 'wall';
+
+import { map } from 'rxjs/operators';
 
 declare let Phaser;
 
@@ -22,7 +26,9 @@ export class LevelsPage implements OnInit {
   public level: any;
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private alertController: AlertController,
+    private http: HttpClient
   ) {
   }
 
@@ -30,21 +36,30 @@ export class LevelsPage implements OnInit {
     this.level = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.level) {
       this.loadLevel();
-      game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-level',
-                           { preload: this.preload, create: this.create, update: this.update, render: this.render });
-
-      that = Object.create(this.constructor.prototype);
     }
   }
 
   loadLevel() {
-    fetch('./assets/data/' + this.level)
-      .then(res => res.json())
-      .then(json => {
+    this.getLevel();
+
+    this.loadGame();
+  }
+
+  getLevel() {
+    let url = 'assets/data/' + this.level + '.json'
+    this.http.get(url)
+      .subscribe(json => {
         json["walls"].forEach(function (wall) {
           walls.push(new Wall(wall));
         });
       });
+  }
+
+  loadGame() {
+    game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-level',
+      { preload: this.preload, create: this.create, update: this.update, render: this.render });
+
+    that = Object.create(this.constructor.prototype);
   }
 
   preload() {
@@ -62,7 +77,9 @@ export class LevelsPage implements OnInit {
 
   create() {
     walls.forEach(function (wall) {
-      game.add.image(wall.x, wall.y, wall.sprite());
+      let image = game.add.image(wall.x, wall.y, wall.sprite());
+      image.width = 59;
+      image.height = 59;
     });
     //this.createWalls();
   }
@@ -77,5 +94,15 @@ export class LevelsPage implements OnInit {
   }
 
   createWalls() {
+  }
+
+  async presentAlert(message) {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 }
