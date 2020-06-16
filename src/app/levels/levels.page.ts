@@ -14,6 +14,7 @@ let that;
 let game;
 let player;
 let aliens;
+let gestures;
 let walls = [];
 
 @Component({
@@ -58,7 +59,6 @@ export class LevelsPage implements OnInit {
   loadGame() {
     game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-level',
       { preload: this.preload, create: this.create, update: this.update, render: this.render });
-
     that = Object.create(this.constructor.prototype);
   }
 
@@ -82,6 +82,15 @@ export class LevelsPage implements OnInit {
       image.height = 59;
     });
     //this.createWalls();
+  }
+
+  handlePan($event) {
+    console.log('event')
+    //game.camera.y += event.velocityX;
+    //game.camera.x += event.velocityY;
+  }
+
+  handleSwipe() {
   }
 
   update() {
