@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertController, GestureController, Gesture } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
 import { Levels } from 'levels';
@@ -23,17 +23,21 @@ let walls = [];
   styleUrls: ['./levels.page.scss'],
 })
 export class LevelsPage implements OnInit {
+  @ViewChild("logo", { read: ElementRef, static: true }) logo: ElementRef;
+
   public levels: Array<Object> = Levels;
   public level: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private alertController: AlertController,
+    private gestureController: GestureController,
     private http: HttpClient
   ) {
   }
 
   ngOnInit() {
+      this.setupGesture();
     this.level = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.level) {
       this.loadLevel();
@@ -56,6 +60,24 @@ export class LevelsPage implements OnInit {
       });
   }
 
+  async setupGesture() {
+    console.log(this.logo.nativeElement)
+    const gesture: Gesture = await this.gestureController.create({
+      el: this.logo.nativeElement,
+      threshold: 5,
+      passive: false,
+      gesturePriority: 100,
+      gestureName: 'my-gesture',
+      onStart: () => console.log('start'),
+      onMove: ev => console.log(ev),
+      onEnd: ev => console.log(ev)
+    }, true);
+  }
+
+  onPan(event) {
+    console.log(event)
+  }
+
   loadGame() {
     game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-level',
       { preload: this.preload, create: this.create, update: this.update, render: this.render });
@@ -76,6 +98,16 @@ export class LevelsPage implements OnInit {
   }
 
   create() {
+    game.input.onDown.add(function() {
+      console.log('DOWN');
+    });
+    game.input.onUp.add(function() {
+      console.log('UP');
+    });
+    game.input.onTap.add(function() {
+      console.log('TAP');
+    });
+
     walls.forEach(function (wall) {
       let image = game.add.image(wall.x, wall.y, wall.sprite());
       image.width = 59;
@@ -84,19 +116,13 @@ export class LevelsPage implements OnInit {
     //this.createWalls();
   }
 
-  handlePan($event) {
-    console.log('event')
-    //game.camera.y += event.velocityX;
-    //game.camera.x += event.velocityY;
-  }
-
-  handleSwipe() {
-  }
-
   update() {
   }
 
   render() {
+    game.debug.pointer(game.input.mousePointer);
+    game.debug.pointer(game.input.pointer1);
+    game.debug.pointer(game.input.pointer2);
   }
 
   preloadWalls() {

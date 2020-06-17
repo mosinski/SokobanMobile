@@ -1,8 +1,10 @@
-<ion-content (pan)="handlePan($event)">
+<ion-content>
+  <div #logo>
   <div id="list" *ngIf="!level">
     <ion-button *ngFor="let level of levels" [routerLink]="['/levels/' + level.id]" routesrDirect="root" class="level">
       <h1>{{ level.id }}</h1>
     </ion-button>
   </div>
-  <div id="phaser-level" *ngIf="level" (pan)="handlePan($event)"></div>
+  <div id="phaser-level" *ngIf="level"></div>
+  </div>
 </ion-content>
