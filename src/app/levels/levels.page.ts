@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AlertController, GestureController, Gesture } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
 import { Levels } from 'levels';
@@ -23,21 +23,17 @@ let walls = [];
   styleUrls: ['./levels.page.scss'],
 })
 export class LevelsPage implements OnInit {
-  @ViewChild("logo", { read: ElementRef, static: true }) logo: ElementRef;
-
   public levels: Array<Object> = Levels;
   public level: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private alertController: AlertController,
-    private gestureController: GestureController,
     private http: HttpClient
   ) {
   }
 
   ngOnInit() {
-      this.setupGesture();
     this.level = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.level) {
       this.loadLevel();
@@ -58,20 +54,6 @@ export class LevelsPage implements OnInit {
           walls.push(new Wall(wall));
         });
       });
-  }
-
-  async setupGesture() {
-    console.log(this.logo.nativeElement)
-    const gesture: Gesture = await this.gestureController.create({
-      el: this.logo.nativeElement,
-      threshold: 5,
-      passive: false,
-      gesturePriority: 100,
-      gestureName: 'my-gesture',
-      onStart: () => console.log('start'),
-      onMove: ev => console.log(ev),
-      onEnd: ev => console.log(ev)
-    }, true);
   }
 
   onPan(event) {
@@ -98,14 +80,20 @@ export class LevelsPage implements OnInit {
   }
 
   create() {
-    game.input.onDown.add(function() {
-      console.log('DOWN');
-    });
+    game.world.setBounds(0, 0, 1920, 1920);
+    game.input.maxPointers = 1
+
     game.input.onUp.add(function() {
-      console.log('UP');
-    });
-    game.input.onTap.add(function() {
-      console.log('TAP');
+      let startPointer = arguments[0].positionDown
+      let endPointer = arguments[1]
+
+      let x = game.camera.x;
+      let y = game.camera.y;
+
+      x += startPointer.x - endPointer.x;
+      y += startPointer.y - endPointer.y;
+
+      game.camera.setPosition(x,y)
     });
 
     walls.forEach(function (wall) {
@@ -120,9 +108,6 @@ export class LevelsPage implements OnInit {
   }
 
   render() {
-    game.debug.pointer(game.input.mousePointer);
-    game.debug.pointer(game.input.pointer1);
-    game.debug.pointer(game.input.pointer2);
   }
 
   preloadWalls() {
