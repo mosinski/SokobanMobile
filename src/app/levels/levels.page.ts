@@ -3,8 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 
-import { Levels } from 'levels';
 import { Wall } from 'wall';
+import { Crate } from 'crate';
+import { Player } from 'player';
+import { Levels } from 'levels';
+import { Ground } from 'ground';
+import { Endpoint } from 'endpoint';
 
 import { map } from 'rxjs/operators';
 
@@ -14,8 +18,11 @@ let that;
 let game;
 let player;
 let aliens;
+let cursors;
 let gestures;
 let walls = [];
+let crates = [];
+let endpoints = [];
 
 @Component({
   selector: 'app-levels',
@@ -53,6 +60,13 @@ export class LevelsPage implements OnInit {
         json["walls"].forEach(function (wall) {
           walls.push(new Wall(wall));
         });
+        json["crates"].forEach(function (crate) {
+          crates.push(new Crate(crate));
+        });
+        json["endpoints"].forEach(function (endpoint) {
+          endpoints.push(new Endpoint(endpoint));
+        });
+        player = new Player(json["start"]);
       });
   }
 
@@ -64,19 +78,6 @@ export class LevelsPage implements OnInit {
     game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-level',
       { preload: this.preload, create: this.create, update: this.update, render: this.render });
     that = Object.create(this.constructor.prototype);
-  }
-
-  preload() {
-    game.load.image('wall_beige', 'assets/sprites/walls/beige.png');
-    game.load.image('wall_black', 'assets/sprites/walls/black.png');
-    game.load.image('wall_brown', 'assets/sprites/walls/brown.png');
-    game.load.image('wall_gray', 'assets/sprites/walls/gray.png');
-
-    game.load.image('wall_round_beige', 'assets/sprites/walls/round_beige.png');
-    game.load.image('wall_round_black', 'assets/sprites/walls/round_black.png');
-    game.load.image('wall_round_brown', 'assets/sprites/walls/round_brown.png');
-    game.load.image('wall_round_gray', 'assets/sprites/walls/round_gray.png');
-    //this.preloadWalls();
   }
 
   create() {
@@ -101,19 +102,82 @@ export class LevelsPage implements OnInit {
       image.width = 59;
       image.height = 59;
     });
-    //this.createWalls();
+
+    crates.forEach(function (crate) {
+      let image = game.add.image(crate.x, crate.y, crate.sprite());
+      image.width = 59;
+      image.height = 59;
+    });
+
+    endpoints.forEach(function (endpoint) {
+      let image = game.add.image(endpoint.x, endpoint.y, endpoint.sprite());
+      image.width = 20;
+      image.height = 20;
+    });
+
+    player = game.add.sprite(player.x, player.y, player.sprite());
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.body.collideWorldBounds = true;
+    player.body.setSize(20, 32, 5, 16);
+
+    player.animations.add('left', [0, 1, 2, 3], 10, true);
+    player.animations.add('turn', [4], 20, true);
+    player.animations.add('right', [5, 6, 7, 8], 10, true);
+
+    game.camera.follow(player);
+
+    cursors = game.input.keyboard.createCursorKeys();
+  }
+
+  preload() {
+    Wall.load(game);
+    Crate.load(game);
+    Ground.load(game);
+    Player.load(game);
+    Endpoint.load(game);
   }
 
   update() {
+    //game.physics.arcade.collide(player, layer);
+
+    //player.body.velocity.x = 0;
+
+    //if (cursors.left.isDown) {
+    //  player.body.velocity.x = -150;
+
+    //  if (facing != 'left') {
+    //    player.animations.play('left');
+    //    facing = 'left';
+    //  }
+    //} else if (cursors.right.isDown) {
+    //  player.body.velocity.x = 150;
+
+    //  if (facing != 'right') {
+    //    player.animations.play('right');
+    //    facing = 'right';
+    //  }
+    //} else {
+    //  if (facing != 'idle') {
+    //    player.animations.stop();
+
+    //    if (facing == 'left') {
+    //      player.frame = 0;
+    //    } else {
+    //      player.frame = 5;
+    //    }
+
+    //    facing = 'idle';
+    //  }
+    //}
+
+    //if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
+    //  player.body.velocity.y = -250;
+    //  jumpTimer = game.time.now + 750;
+    //}
   }
 
   render() {
-  }
-
-  preloadWalls() {
-  }
-
-  createWalls() {
   }
 
   async presentAlert(message) {
